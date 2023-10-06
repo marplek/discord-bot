@@ -20,7 +20,6 @@ COPY . .
 
 # 創建SQLite數據庫的目錄
 RUN mkdir -p /usr/src/app/data
-RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*
 
 # 設定容器啟動時執行的命令
 CMD [ "node", "index.js" ]

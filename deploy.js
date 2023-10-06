@@ -17,6 +17,22 @@ const commands = [
   {
     name: 'viewsubscribers',
     description: 'View the list of subscribers.',
+  },
+  {
+    name: 'setchannel',
+    description: 'Set the channel for reminders.',
+    options: [
+      {
+        name: 'channel',
+        type: 7,
+        description: 'The ID of the channel.',
+        required: true
+      }
+    ]
+  },
+  {
+    name: 'unsetchannel',
+    description: 'Removes the reminder channel and all related subscribers.',
   }
 ];
 
