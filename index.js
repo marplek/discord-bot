@@ -1,6 +1,6 @@
 const { Client, GatewayIntentBits } = require('discord.js');
-const schedule = require('node-schedule');
 const db = require('./database');
+const cron = require('node-cron');
 
 require('dotenv').config();
 
@@ -10,7 +10,8 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
-schedule.scheduleJob('0 20 * * 5', () => {
+// 這將在每週五的UTC+8的20:00運行
+cron.schedule('0 20 * * 5', () => {
     try {
         const getSubscribers = db.prepare('SELECT userId FROM subscribers').all();
         for (const subscriber of getSubscribers) {
@@ -21,10 +22,12 @@ schedule.scheduleJob('0 20 * * 5', () => {
     catch (error) {
         console.error('Database error:', error.message);
     }
+}, {
+    scheduled: true,
+    timezone: "Asia/Taipei"  // UTC+8
 });
 
-
-schedule.scheduleJob('0 23 * * 5', () => {
+cron.schedule('0 23 * * 5', () => {
     try {
         const channelInfo = db.prepare('SELECT channelId FROM reminder_channel').get();
         if (channelInfo && channelInfo.channelId) {
@@ -37,6 +40,9 @@ schedule.scheduleJob('0 23 * * 5', () => {
     catch (error) {
         console.error('Database error:', error.message);
     }
+}, {
+    scheduled: true,
+    timezone: "Asia/Taipei"  // UTC+8
 });
 
 
