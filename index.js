@@ -47,6 +47,22 @@ cron.schedule('0 23 * * 5', () => {
 
 
 client.on('interactionCreate', async interaction => {
+    if (interaction.commandName === 'ping') {
+        try {
+            const msg = await interaction.reply({
+                content: "正在計算延遲......",
+                fetchReply: true
+            });
+            const ping = msg.createdTimestamp - interaction.createdTimestamp;
+            interaction.editReply(`機器人延遲：${ping} ms\nAPI延遲：${client.ws.ping} ms`);
+        } catch (error) {
+            console.error('Error handling /ping command:', error.message);
+            await interaction.reply({ content: '處理 /ping 指令時發生錯誤', ephemeral: true });
+        }
+        return; 
+    }
+
+
     try {
         const currentChannelInfo = db.prepare('SELECT channelId FROM reminder_channel').get();
         const currentChannelId = currentChannelInfo ? currentChannelInfo.channelId : null;
@@ -55,16 +71,6 @@ client.on('interactionCreate', async interaction => {
 
         if (!currentChannelId && interaction.commandName !== 'setchannel') {
             await interaction.reply('您必須首先設定提醒頻道，使用 `setchannel` 指令！');
-            return;
-        }
-
-        if (interaction.commandName === 'ping') {
-            const msg = await interaction.reply({
-                content: "正在計算延遲......",
-                fetchReply: true
-            });
-            const ping = msg.createdTimestamp - interaction.createdTimestamp;
-            interaction.editReply(`機器人延遲：${ping} ms\nAPI延遲：${client.ws.ping} ms`);
             return;
         }
 
