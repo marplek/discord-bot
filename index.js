@@ -103,6 +103,7 @@ client.on("interactionCreate", async (interaction) => {
         db.prepare(
           "INSERT OR REPLACE INTO reminder_channel (channelId) VALUES (?)"
         ).run(channel.id);
+        console.log(channel.id)
         await interaction.reply("Reminder channel set successfully!");
       } else {
         await interaction.reply("Error setting the reminder channel.");
@@ -160,6 +161,7 @@ client.on("interactionCreate", async (interaction) => {
         db.prepare("DELETE FROM reminder_channel WHERE channelId = ?").run(
           currentChannelInfo.channelId
         );
+        console.log(currentChannelInfo.channelId)
 
         await interaction.reply("成功解除提醒頻道和其相關的訂閱者！");
       } catch (error) {
